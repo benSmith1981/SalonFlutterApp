@@ -76,10 +76,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
-
-      if (error is http.Response) {
-        print('Response body: ${error.body}');
-      }
     }
   }
 

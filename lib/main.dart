@@ -1,62 +1,100 @@
 import 'package:flutter/material.dart';
-import 'register_screen.dart'; // Import the RegisterScreen widget
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'register_screen.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Adaptive App',
+      title: 'Login Example',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Salon Login'),
+      home: LoginScreen(),
+      // Define routes for navigation
       routes: {
-        '/register': (context) =>
-            RegisterScreen(), // Define a named route for the RegisterScreen
+        '/register': (context) => RegisterScreen(),
       },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  final String title;
-  const MyHomePage({Key? key, this.title = 'Default Title'}) : super(key: key);
-
+class LoginScreen extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final TextEditingController _usernameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    // Dispose of the controllers when the widget is removed from the widget tree
-    _usernameController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  Future<void> _login() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
 
-  void _login() {
-    // Implement your login logic here
-    print(
-        'Login with: ${_usernameController.text}, ${_passwordController.text}');
-  }
+    final url =
+        Uri.parse('https://salonflutterapp-0f5547cf61c1.herokuapp.com/login');
 
-  void _register() {
-    // Implement your register logic here
-    Navigator.of(context)
-        .pushNamed('/register'); // Navigate to the RegisterScreen
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Login successful, handle the response here
+        print('Login Successful');
+        // You can navigate to another screen or show a toast message
+        // or set a flag to indicate the user is logged in, etc.
+        // For now, let's show a success toast message.
+        Fluttertoast.showToast(
+          msg: 'Login Successful',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+        );
+      } else {
+        // Login failed, handle the error here
+        print('Login Failed with status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        // Display error message as a toast
+        Fluttertoast.showToast(
+          msg: 'Login Failed with status code: ${response.statusCode}',
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    } catch (error) {
+      // Handle network or server errors here
+      print('Error: $error');
+      // Display error message as a toast
+      Fluttertoast.showToast(
+        msg: 'Error: $error',
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -65,9 +103,9 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             TextField(
-              controller: _usernameController,
+              controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                labelText: 'Email',
               ),
             ),
             TextField(
@@ -81,13 +119,23 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: _login,
               child: Text('Login'),
             ),
-            ElevatedButton(
-              onPressed: _register,
+            TextButton(
+              onPressed: () {
+                // Navigate to the registration screen
+                Navigator.pushNamed(context, '/register');
+              },
               child: Text('Register'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
