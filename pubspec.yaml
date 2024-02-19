@@ -2,15 +2,20 @@ name: fluttercoursesalonbooking
 description: A new Flutter project.
 
 version: 1.0.0+1
-
 environment:
-  sdk: ">=2.19.0 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.5
   fluttertoast: ^8.0.8
+  intl: ^0.17.0
+  firebase_core: ^2.8.0
+  cloud_firestore: ^4.4.5
+  crypto: ^3.0.0
+  firebase_auth: ^4.3.0
+  firebase_analytics: ^10.1.6
 
 dev_dependencies:
   flutter_test:

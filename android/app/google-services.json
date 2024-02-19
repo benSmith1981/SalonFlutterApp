@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "38251888557",
+    "project_id": "salonapp-fcdff",
+    "storage_bucket": "salonapp-fcdff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38251888557:android:2de399734b72d30955ab24",
+        "android_client_info": {
+          "package_name": "com.bensmithinc.salonapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjdmSb42UAG5JsOM7o2QAb3R6fajco8f4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
